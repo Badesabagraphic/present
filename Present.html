@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ارائه بادصبا - نسخه ویژه استانداری (پرو)</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Vazirmatn', 'sans-serif'],
+                    },
+                    colors: {
+                        navy: {
+                            50: '#f0f4f8',
+                            100: '#d9e2ec',
+                            800: '#102a43',
+                            900: '#0b1c2e', // Deep Executive Blue
+                        },
+                        gold: {
+                            400: '#d69e2e',
+                            500: '#b45309', // Royal Gold
+                            light: '#fef3c7',
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Vazirmatn Font -->
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            overflow: hidden;
+            perspective: 1200px; /* Enhanced perspective */
+        }
+
+        /* --- Dynamic Background --- */
+        .bg-mesh {
+            position: fixed;
+            inset: 0;
+            background-color: #f8fafc;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(245, 158, 11, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(15, 23, 42, 0.05) 0px, transparent 50%);
+            z-index: 0;
+        }
+
+        .grid-pattern {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(148, 163, 184, 0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(148, 163, 184, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px;
+            mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* --- Glass Cards (Refined) --- */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.95);
+            box-shadow: 
+                0 20px 50px -12px rgba(0, 0, 0, 0.1), /* Softer deep shadow */
+                0 0 0 1px rgba(255, 255, 255, 0.5) inset; /* Inner glow */
+            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+            transition: all 0.3s ease;
+        }
+
+        /* --- Slide Transitions (Optimized) --- */
+        .slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transform: translate3d(0, 40px, 0) scale(0.96); /* Hardware accelerated */
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); /* Elastic snap effect */
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            z-index: 1;
+            will-change: transform, opacity;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translate3d(0, 0, 0) scale(1);
+            pointer-events: all;
+            z-index: 10;
+        }
+        
+        .slide.prev {
+            opacity: 0;
+            transform: translate3d(0, -60px, 0) scale(0.95);
+        }
+        
+        .slide.next {
+            opacity: 0;
+            transform: translate3d(0, 60px, 0) scale(0.95);
+        }
+
+        /* --- Staggered Entrance Animations --- */
+        .slide.active .stagger-child {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Custom Delays */
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
+        .delay-600 { animation-delay: 0.6s; }
+        .delay-700 { animation-delay: 0.7s; }
+
+        /* --- Custom Typography Styling --- */
+        .text-gradient-primary {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .text-gradient-gold {
+            background: linear-gradient(135deg, #92400e 0%, #d97706 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* --- List Styling --- */
+        .modern-list li {
+            position: relative;
+            padding-right: 2rem;
+            margin-bottom: 0.75rem;
+            transition: transform 0.2s ease;
+        }
+        .modern-list li::before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0.65em;
+            width: 8px;
+            height: 8px;
+            background: #2563eb;
+            border-radius: 2px;
+            transform: rotate(45deg);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+            transition: all 0.3s ease;
+        }
+        .modern-list li:hover {
+            transform: translateX(-4px);
+        }
+        .modern-list li:hover::before {
+            background: #d97706;
+            box-shadow: 0 0 0 4px rgba(217, 119, 6, 0.2);
+            transform: rotate(135deg);
+        }
+
+        /* --- 3D Effects --- */
+        .tilt-card {
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+        }
+        .tilt-content {
+            transform: translateZ(30px);
+        }
+
+        /* Scrollbar hide */
+        ::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="selection:bg-blue-100 selection:text-blue-900">
+
+    <!-- Ambient Background -->
+    <div class="bg-mesh"></div>
+    <div class="grid-pattern"></div>
+    
+    <!-- Floating Orbs (Optimized) -->
+    <div class="fixed top-[-10%] right-[-5%] w-[600px] h-[600px] bg-blue-100/40 rounded-full blur-[100px] animate-pulse-slow pointer-events-none z-0"></div>
+    <div class="fixed bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-amber-50/50 rounded-full blur-[100px] animate-pulse-slow pointer-events-none z-0" style="animation-delay: 2s;"></div>
+
+    <!-- Controls -->
+    <div class="fixed top-6 left-6 z-50">
+        <button onclick="toggleFullScreen()" class="glass-card p-3 rounded-full hover:bg-white text-slate-500 hover:text-navy-900 shadow-sm hover:scale-105 transition-all group" title="تمام صفحه">
+            <i data-lucide="maximize" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+        </button>
+    </div>
+
+    <!-- Page Counter -->
+    <div id="counter-container" class="fixed bottom-8 right-8 z-50 hidden md:flex transition-all duration-500 opacity-0 transform translate-y-4">
+        <div class="glass-card pl-6 pr-4 py-2.5 rounded-full flex items-center gap-3 shadow-lg border-white">
+            <span class="text-xs font-semibold text-slate-400 tracking-wider">شرکت پیشگامان موج تلفن همراه</span>
+            <div class="w-px h-4 bg-slate-300"></div>
+            <span id="page-counter" class="text-navy-800 font-black text-lg w-4 text-center">۱</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="relative z-10 w-full h-screen flex items-center justify-center">
+
+        <!-- Slide 0: Cover -->
+        <div class="slide active" id="slide-0">
+            <div class="relative z-10 text-center max-w-4xl w-full">
+                <!-- Logo with Glow -->
+                <div class="relative inline-block mb-8 group cursor-pointer stagger-child delay-100">
+                    <div class="absolute inset-0 bg-blue-500 blur-[50px] opacity-20 group-hover:opacity-40 transition-opacity duration-700 rounded-full"></div>
+                    <div class="glass-card p-6 rounded-[2rem] relative transform group-hover:scale-105 transition-transform duration-500 bg-white/80 border border-white shadow-xl">
+                        <img src="https://badesaba.ir/assets/img/logo_blue.svg" 
+                             alt="لوگوی بادصبا" 
+                             class="w-20 h-20 object-contain drop-shadow-sm filter contrast-125">
+                    </div>
+                </div>
+
+                <h1 class="text-5xl md:text-6xl font-black mb-4 leading-tight tracking-tight text-navy-900 stagger-child delay-200">
+                    <span class="text-gradient-primary">مسیر توسعه بادصبا</span>
+                </h1>
+                
+                <div class="inline-block relative mb-10 stagger-child delay-300">
+                    <p class="text-slate-600 block text-xl font-bold tracking-wide relative z-10">از توسعه هوش مصنوعی تا پنجره واحد ارائه خدمات دولت</p>
+                    <div class="absolute bottom-1 left-0 right-0 h-2 bg-blue-100/80 -z-0 rounded-full transform -skew-x-12"></div>
+                </div>
+
+                <div class="glass-card p-8 rounded-[2rem] text-right border-r-[6px] border-blue-600 shadow-2xl bg-white/60 stagger-child delay-400 max-w-2xl mx-auto transform hover:translate-y-[-4px] transition-transform">
+                    <p class="text-lg text-slate-700 leading-8 mb-3 font-medium">ما امروز نیامده‌ایم صرفاً محصول معرفی کنیم.</p>
+                    <p class="text-lg text-navy-900 font-extrabold leading-8 mb-6 flex items-center gap-3">
+                        <span class="w-1.5 h-6 bg-blue-600 rounded-full shadow-lg shadow-blue-500/30"></span>
+                        آمده‌ایم درباره یک «مسیر» صحبت کنیم؛
+                    </p>
+                    <ul class="modern-list text-lg text-slate-700 space-y-2">
+                        <li class="stagger-child delay-500">مسیر توسعه یک پلتفرم بومی که می‌تواند به‌عنوان پنجره واحد ارائه خدمات دولت و خدمات شهری عمل کند؛</li>
+                        <li class="stagger-child delay-600">مسیری که استان در آن سهم واقعی، نقش واقعی و منفعت قابل اندازه‌گیری دارد.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 1: BadeSaba Today -->
+        <div class="slide" id="slide-1">
+            <div class="w-full max-w-6xl grid md:grid-cols-2 gap-12 items-center px-4">
+                <div class="text-right space-y-6">
+                    <div class="flex items-center gap-4 mb-2 stagger-child delay-100">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-blue-800 flex items-center justify-center shadow-lg shadow-blue-600/20 text-white">
+                            <i data-lucide="activity" class="w-6 h-6"></i>
+                        </div>
+                        <h2 class="text-3xl font-black text-navy-900 tracking-tight">بادصبا امروز</h2>
+                    </div>
+
+                    <ul class="modern-list text-lg text-slate-600 space-y-3 stagger-child delay-200">
+                        <li>یک پلتفرم عملیاتی، فعال و بالغ است</li>
+                        <li>کاربر واقعی، استفاده روزانه و جریان مالی مشخص دارد</li>
+                        <li>تمام توسعه‌های انجام‌شده تاکنون با اتکا به منابع داخلی شرکت پیش رفته است</li>
+                    </ul>
+
+                    <div class="glass-card p-5 rounded-2xl border-r-4 border-rose-500 bg-rose-50/40 mt-4 shadow-sm stagger-child delay-300">
+                        <span class="block text-rose-600 font-bold mb-2 text-sm flex items-center gap-2 uppercase tracking-wide">
+                            <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                            نکته
+                        </span>
+                        <p class="text-slate-800 text-lg leading-7 font-medium">ما در نقطه «شروع» نیستیم؛<br>در نقطه <span class="text-rose-600 font-black bg-white px-2 py-0.5 rounded shadow-sm border border-rose-100">مقیاس‌دادن</span> و «توسعه ساختاریافته» ایستاده‌ایم.</p>
+                    </div>
+                </div>
+
+                <div class="glass-card p-8 h-[360px] flex items-center justify-center relative overflow-visible group bg-white/40 tilt-card stagger-child delay-400">
+                    <div class="absolute inset-0 bg-gradient-to-t from-white/80 to-transparent rounded-3xl z-0"></div>
+                    
+                    <!-- Graph Visualization -->
+                    <div class="relative w-full h-full flex items-end justify-center gap-6 pb-4 tilt-content z-10">
+                        <!-- Dashed Line Overlay -->
+                        <svg class="absolute inset-0 w-full h-full pointer-events-none z-20 overflow-visible" viewBox="0 0 400 300">
+                            <defs>
+                                <marker id="arrowhead" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                                    <path d="M0,0 L0,6 L6,3 z" fill="#ef4444" />
+                                </marker>
+                            </defs>
+                            <path d="M 50, 220 Q 150, 200 350, 50" fill="none" stroke="#ef4444" stroke-width="3" marker-end="url(#arrowhead)" stroke-dasharray="6 4" stroke-linecap="round" class="opacity-80 drop-shadow-md" />
+                        </svg>
+
+                        <!-- Bars -->
+                        <div class="w-16 bg-slate-200 rounded-t-xl h-[30%] relative border-t border-white shadow-sm flex items-end justify-center pb-2">
+                             <span class="text-xs text-slate-400 font-bold mb-1">شروع</span>
+                        </div>
+                        <div class="w-16 bg-slate-300 rounded-t-xl h-[50%] relative border-t border-white shadow-sm"></div>
+                        <div class="w-16 bg-blue-400 rounded-t-xl h-[70%] relative border-t border-white/50 shadow-md bg-gradient-to-b from-blue-400 to-blue-600"></div>
+                        
+                        <!-- Main Active Bar -->
+                        <div class="w-16 bg-emerald-500 rounded-t-xl h-full relative shadow-xl shadow-emerald-500/30 bg-gradient-to-b from-emerald-400 to-emerald-600 border-t border-white/50 group-hover:scale-y-105 transition-transform origin-bottom duration-500">
+                            <div class="absolute inset-0 bg-white/20 animate-pulse"></div>
+                            <!-- Tag -->
+                            <div class="absolute -top-12 left-1/2 -translate-x-1/2 bg-navy-900 text-white px-4 py-1.5 rounded-lg text-sm font-bold shadow-lg whitespace-nowrap flex flex-col items-center z-30">
+                                <span>الان</span>
+                                <div class="w-3 h-3 bg-navy-900 rotate-45 absolute -bottom-1"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Future & AI -->
+        <div class="slide" id="slide-2">
+            <div class="w-full max-w-6xl h-full flex flex-col justify-center px-4">
+                <div class="text-center mb-10 stagger-child delay-100">
+                    <div class="inline-flex items-center gap-4 bg-white px-8 py-3 rounded-full shadow-lg border border-slate-100">
+                        <div class="bg-cyan-50 p-2 rounded-full"><i data-lucide="cpu" class="w-8 h-8 text-cyan-600"></i></div>
+                        <h2 class="text-3xl font-black text-slate-800"><span class="text-gradient-primary">نگاه آینده‌محور – AI و داده</span></h2>
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Card 1 -->
+                    <div class="glass-card p-6 rounded-2xl hover:bg-white transition-all duration-300 group hover:shadow-xl hover:-translate-y-2 border-t-[6px] border-cyan-500 stagger-child delay-200">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-bold text-cyan-800">داده‌محوری عملیاتی</h3>
+                            <div class="p-2 bg-cyan-50 rounded-lg group-hover:bg-cyan-500 group-hover:text-white transition-colors">
+                                <i data-lucide="database" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+                        <p class="text-slate-600 text-base leading-7 font-medium">داشبوردهای تحلیلی Metabase فعال هستند و بخشی از تصمیم‌سازی محصول و پایش عملکرد را پوشش می‌دهند.</p>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="glass-card p-6 rounded-2xl hover:bg-white transition-all duration-300 group hover:shadow-xl hover:-translate-y-2 border-t-[6px] border-purple-500 stagger-child delay-300">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-bold text-purple-800">هوش مصنوعی و Multi-Agent</h3>
+                            <div class="p-2 bg-purple-50 rounded-lg group-hover:bg-purple-500 group-hover:text-white transition-colors">
+                                <i data-lucide="bot" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+                        <p class="text-slate-600 text-base leading-7 font-medium">ایجنت هوشمند فعال است و پاسخ می‌دهد. (AI از فاز ایده و پروتوتایپ عبور کرده است).</p>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="glass-card p-6 rounded-2xl hover:bg-white transition-all duration-300 group hover:shadow-xl hover:-translate-y-2 border-t-[6px] border-blue-500 stagger-child delay-400">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-bold text-blue-800">زیرساخت داده (Data Lake)</h3>
+                            <div class="p-2 bg-blue-50 rounded-lg group-hover:bg-blue-500 group-hover:text-white transition-colors">
+                                <i data-lucide="server" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+                        <p class="text-slate-600 text-base leading-7 font-medium">ClickHouse و دیتالیک به‌صورت لوکال برای تست و استفاده محدود راه‌اندازی شده‌اند.</p>
+                    </div>
+                    <!-- Card 4 -->
+                    <div class="glass-card p-6 rounded-2xl hover:bg-white transition-all duration-300 group hover:shadow-xl hover:-translate-y-2 border-t-[6px] border-emerald-500 stagger-child delay-500">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-bold text-emerald-800">سرویس‌های هوشمند داخلی</h3>
+                            <div class="p-2 bg-emerald-50 rounded-lg group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+                                <i data-lucide="code-2" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+                        <p class="text-slate-600 text-base leading-7 font-medium">سرویس‌ها فعال‌اند اما به دلیل نبود GPU لوکال، اجرا با محدودیت همراه است.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Limits -->
+        <div class="slide" id="slide-3">
+            <div class="w-full max-w-6xl grid md:grid-cols-2 gap-12 items-center px-4">
+                <div class="text-right space-y-8">
+                    <div class="flex items-center gap-4 text-rose-600 mb-2 stagger-child delay-100">
+                        <div class="w-14 h-14 rounded-2xl bg-rose-50 flex items-center justify-center border border-rose-100 shadow-sm">
+                            <i data-lucide="alert-triangle" class="w-7 h-7"></i>
+                        </div>
+                        <h2 class="text-3xl font-black text-slate-800 leading-tight">محدودیت‌ها و نیازمندی‌ها</h2>
+                    </div>
+                    
+                    <p class="text-slate-600 text-xl font-light stagger-child delay-200">برای عبور به فاز توسعه پایدار، با سه چالش اصلی در زیرساخت روبرو هستیم:</p>
+
+                    <div class="space-y-4">
+                        <div class="glass-panel p-5 rounded-2xl border-r-[6px] border-slate-400 transition-all hover:translate-x-2 bg-white/70 shadow-sm stagger-child delay-300 group hover:bg-white">
+                            <h3 class="font-bold text-slate-900 text-lg mb-2 group-hover:text-blue-700 transition-colors">۱. داده (Data)</h3>
+                            <p class="text-slate-600 leading-7">معماری فعلی پاسخگوی حجم چند ده میلیونی و اسکیل کامل داده‌ها نیست؛ نیازمند بلوغ زیرساختی (سرور/دیسک) است.</p>
+                        </div>
+                        <div class="glass-panel p-5 rounded-2xl border-r-[6px] border-slate-400 transition-all hover:translate-x-2 bg-white/70 shadow-sm stagger-child delay-400 group hover:bg-white">
+                            <h3 class="font-bold text-slate-900 text-lg mb-2 group-hover:text-purple-700 transition-colors">۲. هوش مصنوعی (AI)</h3>
+                            <p class="text-slate-600 leading-7">ایجنت‌های تخصصی (تحلیل رفتار/پشتیبانی) هنوز عملیاتی نشده‌اند و نیازمند بستر مناسب هستند.</p>
+                        </div>
+                        <div class="glass-panel p-5 rounded-2xl border-r-[6px] border-rose-500 bg-rose-50/50 transition-all hover:translate-x-2 shadow-md stagger-child delay-500 hover:bg-rose-50 border border-rose-100">
+                            <h3 class="font-bold text-rose-700 text-lg mb-2">۳. زیرساخت پردازشی (Infrastructure)</h3>
+                            <p class="text-slate-800 leading-7 font-medium">گلوگاه اصلی اسکیل و پایداری سرویس‌های AI، کمبود GPU و توان پردازشی متناسب با حجم کاربر است.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3D Visualization of Server Load -->
+                <div class="glass-card p-8 h-[400px] flex items-center justify-center relative bg-white/40 tilt-card stagger-child delay-600">
+                     <div class="flex flex-col items-center gap-6 relative z-10 tilt-content w-full max-w-xs">
+                        <!-- Glowing Ring -->
+                        <div class="relative mb-4">
+                            <div class="absolute inset-0 bg-rose-500 blur-[60px] opacity-20 animate-pulse rounded-full"></div>
+                            <div class="relative z-10 p-6 bg-white rounded-full shadow-2xl border-4 border-rose-50">
+                                <i data-lucide="server-off" class="w-20 h-20 text-rose-500"></i>
+                            </div>
+                            <!-- Orbiting Dot -->
+                             <div class="absolute inset-[-20px] rounded-full border border-rose-200 border-dashed animate-[spin_10s_linear_infinite]"></div>
+                        </div>
+                        
+                        <!-- Progress Bar -->
+                        <div class="w-full space-y-2">
+                            <div class="flex justify-between text-xs font-bold text-slate-500 uppercase tracking-wider">
+                                <span>Capacity</span>
+                                <span class="text-rose-600">Critical</span>
+                            </div>
+                            <div class="h-4 w-full bg-slate-200 rounded-full overflow-hidden border border-slate-300 shadow-inner">
+                                <div class="h-full bg-gradient-to-r from-rose-400 via-rose-500 to-rose-600 w-[98%] shadow-[0_0_15px_rgba(244,63,94,0.6)] animate-pulse relative overflow-hidden">
+                                    <div class="absolute inset-0 bg-white/20 skew-x-12 animate-[float_2s_infinite]"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center p-3 bg-white/80 rounded-xl border border-rose-100 shadow-sm w-full">
+                            <span class="font-mono font-black text-3xl text-rose-600 tracking-tight block">98% LOAD</span>
+                            <span class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Critical Resource Limit</span>
+                        </div>
+                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Gov Services -->
+        <div class="slide" id="slide-4">
+            <div class="w-full max-w-6xl grid md:grid-cols-2 gap-16 items-center px-4">
+                <div class="text-right space-y-8">
+                    <div class="flex items-center gap-4 text-purple-800 stagger-child delay-100">
+                        <div class="w-14 h-14 rounded-2xl bg-purple-100 flex items-center justify-center border border-purple-200 shadow-sm">
+                            <i data-lucide="layout-grid" class="w-7 h-7"></i>
+                        </div>
+                        <h2 class="text-3xl font-black text-navy-900">پنجره واحد خدمات دولت</h2>
+                    </div>
+
+                    <div class="stagger-child delay-200">
+                        <p class="text-slate-700 text-xl leading-8 font-light mb-4">بادصبا آمادگی دارد در چارچوب سیاست‌های ملی،</p>
+                        <ul class="modern-list text-lg text-slate-800 font-medium">
+                            <li>به‌عنوان پنجره واحد دسترسی به خدمات دولت حرکت کند؛</li>
+                            <li>پنجره‌ای که استان در آن سهم و نقش پررنگ دارد.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="space-y-3 stagger-child delay-300">
+                        <p class="text-slate-500 text-sm font-bold uppercase tracking-wide mb-2">از جمله خدمات قابل ارائه:</p>
+                        <div class="glass-panel px-5 py-3 rounded-xl flex items-center gap-4 text-slate-700 bg-white shadow-sm hover:scale-102 hover:shadow-md transition-all cursor-default border-l-4 border-purple-500">
+                             <div class="w-2.5 h-2.5 rounded-full bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.6)]"></div>
+                             <span class="text-base font-medium">پیگیری و استعلام یارانه و خدمات حمایتی</span>
+                        </div>
+                        <div class="glass-panel px-5 py-3 rounded-xl flex items-center gap-4 text-slate-700 bg-white shadow-sm hover:scale-102 hover:shadow-md transition-all cursor-default border-l-4 border-blue-500">
+                             <div class="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.6)]"></div>
+                             <span class="text-base font-medium">استعلام ملک، سکونت، یا اطلاعات پایه خانوار</span>
+                        </div>
+                        <div class="glass-panel px-5 py-3 rounded-xl flex items-center gap-4 text-slate-700 bg-white shadow-sm hover:scale-102 hover:shadow-md transition-all cursor-default border-l-4 border-emerald-500">
+                             <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></div>
+                             <span class="text-base font-medium">خدمات بیمه‌ای و رفاهی</span>
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-5 rounded-xl border-l-8 border-purple-700 bg-gradient-to-r from-purple-50 to-white mt-6 shadow-md stagger-child delay-400">
+                        <div class="flex items-start gap-3">
+                            <i data-lucide="info" class="w-5 h-5 text-purple-700 mt-1"></i>
+                            <div>
+                                <span class="font-black block mb-2 text-purple-900 text-base">نکته مهم:</span>
+                                <ul class="list-disc list-inside space-y-1 text-sm text-slate-700 leading-6">
+                                    <li>ما قصد رقابت یا جایگزینی پنجره ملی خدمات دولت را نداریم</li>
+                                    <li>این پنجره، یک <span class="font-bold text-purple-700 bg-purple-100 px-1 rounded">لایه کاربرمحور، اجرایی و مکمل</span> است</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phone Mockup -->
+                <div class="glass-card p-0 flex items-center justify-center h-[460px] relative overflow-hidden bg-transparent border-0 shadow-none tilt-card stagger-child delay-500">
+                    <!-- Glow behind phone -->
+                    <div class="absolute inset-0 bg-gradient-to-tr from-purple-200/50 to-blue-200/50 blur-[50px] rounded-full transform scale-75"></div>
+                    
+                    <!-- Phone Body -->
+                    <div class="w-64 h-[420px] bg-white border-[6px] border-slate-800 rounded-[2.5rem] shadow-2xl flex flex-col items-center pt-6 overflow-hidden relative z-10 transform rotate-[-6deg] hover:rotate-0 transition-all duration-700 tilt-content">
+                        <!-- Dynamic Island / Notch -->
+                        <div class="w-20 h-6 bg-slate-900 rounded-full mb-6 z-20"></div>
+                        
+                        <!-- UI Content -->
+                        <div class="w-full px-5 space-y-4 z-20">
+                            <!-- Hero Card -->
+                            <div class="h-24 bg-gradient-to-br from-purple-600 to-indigo-700 rounded-2xl w-full shadow-lg flex flex-col items-center justify-center text-white gap-2 relative overflow-hidden group">
+                                <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                <i data-lucide="fingerprint" class="w-8 h-8 opacity-90"></i>
+                                <span class="text-[9px] opacity-80 tracking-[0.2em] font-mono">AUTHENTICATED</span>
+                            </div>
+                            
+                            <!-- List Items -->
+                            <div class="space-y-3">
+                                <div class="h-12 bg-slate-50 rounded-xl w-full border border-slate-100 flex items-center px-3 gap-3 shadow-sm">
+                                    <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600"><i data-lucide="user" class="w-4 h-4"></i></div>
+                                    <div class="w-20 h-2 bg-slate-200 rounded-full"></div>
+                                </div>
+                                <div class="h-12 bg-slate-50 rounded-xl w-full border border-slate-100 flex items-center px-3 gap-3 shadow-sm">
+                                    <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600"><i data-lucide="file-text" class="w-4 h-4"></i></div>
+                                    <div class="w-24 h-2 bg-slate-200 rounded-full"></div>
+                                </div>
+                                <div class="h-12 bg-slate-50 rounded-xl w-full border border-slate-100 flex items-center px-3 gap-3 shadow-sm">
+                                    <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600"><i data-lucide="shield-check" class="w-4 h-4"></i></div>
+                                    <div class="w-16 h-2 bg-slate-200 rounded-full"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Screen Reflection -->
+                        <div class="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-white/30 via-transparent to-transparent pointer-events-none rounded-[2.3rem] z-30"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Province Share -->
+        <div class="slide" id="slide-5">
+            <div class="text-center max-w-5xl mx-auto space-y-10 px-4">
+                <div class="inline-block p-8 bg-white rounded-full mb-2 shadow-xl border border-orange-100 stagger-child delay-100 relative">
+                    <div class="absolute inset-0 bg-orange-100 rounded-full animate-ping opacity-20"></div>
+                    <i data-lucide="map-pin" class="w-16 h-16 text-orange-500 relative z-10"></i>
+                </div>
+                
+                <div class="space-y-4 stagger-child delay-200">
+                    <h2 class="text-5xl font-black text-navy-900 tracking-tight">سهم استان در پنجره خدمات دولت</h2>
+                    <p class="text-xl text-slate-500 font-light">این پنجره صرفاً ملی نیست.</p>
+                </div>
+                
+                <h2 class="text-3xl text-gradient-gold font-bold stagger-child delay-300 py-2">استان می‌تواند در آن سهم فعال داشته باشد:</h2>
+
+                <div class="grid md:grid-cols-2 gap-8 text-right stagger-child delay-400">
+                    <div class="glass-card p-8 rounded-[2rem] hover:bg-white transition-all group hover:shadow-2xl hover:-translate-y-2 duration-300 border-t-8 border-orange-400">
+                         <div class="flex items-start gap-4">
+                             <div class="w-12 h-12 rounded-2xl bg-slate-900 flex items-center justify-center text-white text-xl font-bold flex-shrink-0 group-hover:bg-orange-500 transition-colors shadow-lg">۱</div>
+                             <p class="text-lg text-slate-700 leading-8 font-medium pt-1">خدماتی که در سطح ملی طراحی می‌شوند، ولی اجرای مؤثرشان نیازمند همراهی استانی است</p>
+                         </div>
+                    </div>
+                    <div class="glass-card p-8 rounded-[2rem] hover:bg-white transition-all group hover:shadow-2xl hover:-translate-y-2 duration-300 border-t-8 border-orange-400">
+                         <div class="flex items-start gap-4">
+                             <div class="w-12 h-12 rounded-2xl bg-slate-900 flex items-center justify-center text-white text-xl font-bold flex-shrink-0 group-hover:bg-orange-500 transition-colors shadow-lg">۲</div>
+                             <p class="text-lg text-slate-700 leading-8 font-medium pt-1">فرآیندهایی که برای اخذ مجوزها (مثل مجوزهای مرتبط با GSB / اتصال‌های رسمی)</p>
+                         </div>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col items-center gap-4 stagger-child delay-500 pt-6">
+                    <p class="text-lg text-slate-600 font-medium">با توصیه و حمایت استاندار مسیرشان بسیار هموارتر می‌شود</p>
+                    <div class="inline-block px-10 py-4 rounded-full border-2 border-orange-200 bg-orange-50 shadow-lg mt-2 animate-float">
+                         <p class="text-xl font-black text-orange-700 flex items-center gap-2">
+                            <i data-lucide="star" class="w-5 h-5 fill-orange-500 text-orange-500"></i>
+                            اینجا نقش استاندار کلیدی است.
+                            <i data-lucide="star" class="w-5 h-5 fill-orange-500 text-orange-500"></i>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Beyond Gov -->
+        <div class="slide" id="slide-6">
+            <div class="w-full max-w-6xl grid md:grid-cols-2 gap-16 items-center px-4">
+                <div class="text-right space-y-8">
+                    <div class="flex items-center gap-4 text-indigo-800 stagger-child delay-100">
+                        <div class="w-14 h-14 rounded-2xl bg-indigo-50 flex items-center justify-center border border-indigo-100 shadow-sm">
+                            <i data-lucide="globe-2" class="w-7 h-7"></i>
+                        </div>
+                        <h2 class="text-3xl font-bold text-navy-900">توسعه پنجره واحد فراتر از دولت</h2>
+                    </div>
+
+                    <div class="stagger-child delay-200">
+                        <p class="text-slate-600 text-xl font-light mb-4">نگاه بادصبا محدود به خدمات دولتی نیست.</p>
+                        <p class="text-navy-900 text-xl font-bold mb-4 flex items-center gap-2">
+                            <span class="w-2 h-2 bg-indigo-600 rounded-full"></span>
+                            این پنجره واحد می‌تواند در ادامه مسیر:
+                        </p>
+                        <div class="bg-white/60 p-5 rounded-2xl border border-white shadow-sm">
+                            <ul class="modern-list text-lg text-slate-700 font-medium">
+                                <li>خدمات بخش خصوصی</li>
+                                <li>خدمات شهری</li>
+                                <li>خدمات عمومی و منطقه‌ای</li>
+                            </ul>
+                        </div>
+                        <p class="text-slate-600 text-lg mt-4 px-2">را هم کنار هم تجمیع کند.</p>
+                    </div>
+                    
+                    <div class="glass-card p-6 rounded-2xl border-l-8 border-indigo-600 bg-indigo-50/50 shadow-md stagger-child delay-300">
+                        <h2 class="text-xl font-black text-indigo-900 mb-3">مأموریت بزرگ پلتفرم‌هایی مثل بادصبا:</h2>
+                        <ul class="space-y-3 text-slate-700 text-lg font-medium">
+                            <li class="flex items-center gap-3"><div class="w-2 h-2 bg-indigo-500 rounded-full shadow-[0_0_8px_rgba(99,102,241,0.6)]"></div> ارائه خدمات شهری، منطقه‌ای و عمومی</li>
+                            <li class="flex items-center gap-3"><div class="w-2 h-2 bg-indigo-500 rounded-full shadow-[0_0_8px_rgba(99,102,241,0.6)]"></div> به جامعه مخاطب کشوری و ملی</li>
+                        </ul>
+                    </div>
+                    
+                    <p class="text-slate-500 text-lg font-medium italic stagger-child delay-400 border-r-4 border-slate-300 pr-4">در این مأموریت، استاندار می‌تواند نقش راهبردی و اثرگذار داشته باشد.</p>
+                </div>
+
+                <div class="glass-card p-0 flex items-center justify-center h-[400px] w-[400px] mx-auto rounded-full bg-white/30 tilt-card stagger-child delay-500">
+                    <!-- Solar System Concept -->
+                    <div class="relative w-full h-full flex items-center justify-center tilt-content">
+                        <!-- Orbits -->
+                        <div class="absolute w-40 h-40 border-2 border-indigo-200/50 rounded-full animate-[spin_12s_linear_infinite] border-dashed"></div>
+                        <div class="absolute w-72 h-72 border border-indigo-200/50 rounded-full animate-[spin_20s_linear_infinite_reverse]"></div>
+                        <div class="absolute w-96 h-96 border border-indigo-100/30 rounded-full animate-[spin_30s_linear_infinite] border-dotted"></div>
+                        
+                        <!-- Satellite 1: Urban -->
+                        <div class="glass-panel w-20 h-20 rounded-2xl absolute top-8 flex flex-col items-center gap-1 transform hover:scale-110 transition-transform bg-white shadow-lg border border-indigo-100 z-20 justify-center">
+                             <i data-lucide="building-2" class="w-6 h-6 text-indigo-600"></i>
+                             <span class="text-[10px] font-bold text-indigo-900 uppercase">شهری</span>
+                        </div>
+                        
+                        <!-- Satellite 2: Private -->
+                        <div class="glass-panel w-20 h-20 rounded-2xl absolute bottom-16 left-8 flex flex-col items-center gap-1 transform hover:scale-110 transition-transform bg-white shadow-lg border border-indigo-100 z-20 justify-center">
+                             <i data-lucide="briefcase" class="w-6 h-6 text-indigo-600"></i>
+                             <span class="text-[10px] font-bold text-indigo-900 uppercase">خصوصی</span>
+                        </div>
+                        
+                        <!-- Satellite 3: Public -->
+                        <div class="glass-panel w-20 h-20 rounded-2xl absolute bottom-16 right-8 flex flex-col items-center gap-1 transform hover:scale-110 transition-transform bg-white shadow-lg border border-indigo-100 z-20 justify-center">
+                             <i data-lucide="users" class="w-6 h-6 text-indigo-600"></i>
+                             <span class="text-[10px] font-bold text-indigo-900 uppercase">عمومی</span>
+                        </div>
+                        
+                        <!-- Core -->
+                        <div class="w-28 h-28 bg-gradient-to-br from-indigo-600 to-navy-900 rounded-full flex items-center justify-center shadow-2xl shadow-indigo-500/40 z-10 border-4 border-white">
+                            <i data-lucide="layers" class="w-10 h-10 text-white animate-pulse"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Prerequisites -->
+        <div class="slide" id="slide-7">
+            <div class="w-full max-w-4xl mx-auto glass-card rounded-[2.5rem] p-10 relative overflow-hidden bg-white/95 shadow-2xl border-t-8 border-emerald-500">
+                <!-- Background Decor -->
+                <div class="absolute -top-20 -left-20 w-80 h-80 bg-emerald-100 rounded-full blur-[80px] opacity-40 animate-pulse"></div>
+                <div class="absolute -bottom-20 -right-20 w-80 h-80 bg-blue-100 rounded-full blur-[80px] opacity-40 animate-pulse" style="animation-delay: 1s;"></div>
+                
+                <div class="relative z-10">
+                    <h2 class="text-3xl font-black text-slate-900 mb-8 border-b-2 border-slate-100 pb-6 flex items-center gap-4 stagger-child delay-100">
+                        <div class="p-3 bg-emerald-100 rounded-2xl text-emerald-600 shadow-inner">
+                            <i data-lucide="file-check" class="w-8 h-8"></i>
+                        </div>
+                        پیش‌نیازهای توسعه پایدار با محوریت استان
+                    </h2>
+                    
+                    <ul class="space-y-4">
+                        <li class="flex items-center gap-5 p-5 rounded-2xl hover:bg-slate-50 transition-colors bg-white shadow-sm border border-slate-100 stagger-child delay-200 group hover:shadow-md hover:-translate-x-2 duration-300">
+                            <div class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/30 group-hover:scale-110 transition-transform">
+                                <i data-lucide="check" class="w-5 h-5"></i>
+                            </div>
+                            <span class="text-lg text-slate-700 font-bold">حمایت در مسیر پیشبرد پنجره خدمات دولت</span>
+                        </li>
+                        <li class="flex items-center gap-5 p-5 rounded-2xl hover:bg-slate-50 transition-colors bg-white shadow-sm border border-slate-100 stagger-child delay-300 group hover:shadow-md hover:-translate-x-2 duration-300">
+                            <div class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/30 group-hover:scale-110 transition-transform">
+                                <i data-lucide="check" class="w-5 h-5"></i>
+                            </div>
+                            <span class="text-lg text-slate-700 font-bold">ایفای نقش تسهیل‌گر بین نهادهای استانی و منطقه‌ای</span>
+                        </li>
+                        <li class="flex items-center gap-5 p-5 rounded-2xl hover:bg-slate-50 transition-colors bg-white shadow-sm border border-slate-100 stagger-child delay-400 group hover:shadow-md hover:-translate-x-2 duration-300">
+                            <div class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/30 group-hover:scale-110 transition-transform">
+                                <i data-lucide="check" class="w-5 h-5"></i>
+                            </div>
+                            <span class="text-lg text-slate-700 font-bold">همراهی در مسیر اخذ مجوزها و اتصال‌های رسمی</span>
+                        </li>
+                        <li class="flex items-center gap-5 p-5 rounded-2xl hover:bg-slate-50 transition-colors bg-white shadow-sm border border-slate-100 stagger-child delay-500 group hover:shadow-md hover:-translate-x-2 duration-300">
+                            <div class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/30 group-hover:scale-110 transition-transform">
+                                <i data-lucide="check" class="w-5 h-5"></i>
+                            </div>
+                            <span class="text-lg text-slate-700 font-bold">حمایت از توسعه زیرساخت (سرور، پردازش، GPU، بودجه هدفمند)</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Recap -->
+        <div class="slide" id="slide-8">
+            <div class="w-full max-w-6xl grid md:grid-cols-2 gap-10 items-stretch px-4">
+                <div class="space-y-6 flex flex-col justify-center">
+                    <div class="glass-panel p-8 rounded-[2rem] border-r-8 border-blue-600 hover:bg-white transition-all bg-white/80 shadow-lg stagger-child delay-100 hover:scale-[1.02] duration-300">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-2 bg-blue-100 rounded-lg"><i data-lucide="bookmark" class="w-6 h-6 text-blue-700"></i></div>
+                            <h2 class="text-2xl font-black text-blue-800">بادصبا امروز:</h2>
+                        </div>
+                        <ul class="modern-list text-lg text-slate-700 space-y-3 font-medium">
+                            <li>یک پلتفرم بومی، فعال و در حال رشد است</li>
+                            <li>مسیر توسعه خود را آغاز کرده و بخشی از آن را پیش برده است</li>
+                        </ul>
+                    </div>
+
+                    <div class="glass-panel p-8 rounded-[2rem] border-r-8 border-purple-600 hover:bg-white transition-all bg-white/80 shadow-lg stagger-child delay-200 hover:scale-[1.02] duration-300">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-2 bg-purple-100 rounded-lg"><i data-lucide="fast-forward" class="w-6 h-6 text-purple-700"></i></div>
+                            <h2 class="text-2xl font-black text-purple-800">اکنون برای عبور به فاز بعدی:</h2>
+                        </div>
+                        <ul class="modern-list text-lg text-slate-700 space-y-3 font-medium">
+                            <li>نیازمند همراهی هدفمند استانداری است</li>
+                            <li>به‌ویژه در مسیر پنجره خدمات دولت و هماهنگی نهادی</li>
+                        </ul>
+                    </div>
+                </div>
+
+                 <!-- Abstract Visual: Bridge/Connection -->
+                 <div class="glass-card p-8 rounded-[2.5rem] flex items-center justify-center bg-white/50 tilt-card stagger-child delay-300 relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10"></div>
+                    <div class="relative w-full h-full flex items-center justify-center tilt-content">
+                        <!-- Left Node -->
+                        <div class="absolute left-10 flex flex-col items-center gap-2">
+                            <div class="w-20 h-20 bg-white rounded-2xl shadow-xl flex items-center justify-center border-2 border-blue-100">
+                                <img src="https://badesaba.ir/assets/img/logo_blue.svg" class="w-12 h-12 object-contain">
+                            </div>
+                            <span class="font-bold text-slate-500">پلتفرم</span>
+                        </div>
+                        
+                        <!-- Connection Line -->
+                        <div class="h-3 bg-slate-200 w-48 rounded-full relative overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-600 animate-[shimmer_2s_infinite] w-full"></div>
+                        </div>
+                        
+                        <!-- Right Node -->
+                        <div class="absolute right-10 flex flex-col items-center gap-2">
+                             <div class="w-20 h-20 bg-white rounded-2xl shadow-xl flex items-center justify-center border-2 border-purple-100">
+                                <i data-lucide="landmark" class="w-10 h-10 text-purple-700"></i>
+                            </div>
+                            <span class="font-bold text-slate-500">استانداری</span>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: End / Vision -->
+        <div class="slide" id="slide-9">
+             <div class="text-center w-full max-w-6xl relative z-10 px-4">
+                <div class="mb-10 inline-block relative stagger-child delay-100">
+                    <div class="absolute inset-0 bg-blue-400 blur-[60px] opacity-40 animate-pulse rounded-full"></div>
+                    <div class="p-8 glass-card rounded-full border border-white relative z-10 bg-white shadow-2xl">
+                        <i data-lucide="flag" class="w-20 h-20 text-blue-600 fill-blue-50"></i>
+                    </div>
+                </div>
+                
+                <h1 class="text-5xl md:text-6xl font-black mb-16 text-navy-900 tracking-tight stagger-child delay-200 drop-shadow-sm">چشم‌انداز و نقشه راه نهایی</h1>
+
+                <div class="grid md:grid-cols-3 gap-8 text-right stagger-child delay-300">
+                    <div class="glass-card p-8 rounded-[2rem] hover:-translate-y-3 transition-transform duration-500 border-t-8 border-blue-500 bg-white/80 hover:shadow-2xl hover:bg-white group">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">1</div>
+                            <h2 class="text-xl font-black text-blue-800">ما الان کجا هستیم؟</h2>
+                        </div>
+                        <p class="text-slate-600 text-base leading-7 font-bold">بادصبا از فاز محصول عبور کرده و در آستانه توسعه خدمات هوشمند در مقیاس واقعی است.</p>
+                    </div>
+
+                     <div class="glass-card p-8 rounded-[2rem] hover:-translate-y-3 transition-transform duration-500 border-t-8 border-purple-500 bg-white/80 hover:shadow-2xl hover:bg-white group">
+                         <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center group-hover:bg-purple-600 group-hover:text-white transition-colors">2</div>
+                            <h2 class="text-xl font-black text-purple-800">چه کمکی می‌خواهیم؟</h2>
+                        </div>
+                        <p class="text-slate-600 text-base leading-7 font-bold">همراهی استانداری برای پیشبرد پنجره واحد خدمات دولت و تسهیل زیرساخت توسعه.</p>
+                    </div>
+
+                     <div class="glass-card p-8 rounded-[2rem] hover:-translate-y-3 transition-transform duration-500 border-t-8 border-emerald-500 bg-emerald-50/60 hover:shadow-2xl hover:bg-emerald-50 group">
+                         <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-colors">3</div>
+                            <h2 class="text-xl font-black text-emerald-800">ارزش برای استان؟</h2>
+                        </div>
+                        <p class="text-slate-700 text-base leading-7 font-black">تبدیل استان به نقطه مرجع ارائه خدمات هوشمند، با اثر مستقیم بر اقتصاد منطقه و کارآمدسازی نظام اداری.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Navigation Controls -->
+    <div class="fixed bottom-8 left-0 right-0 z-50 flex justify-center items-center gap-8 select-none">
+        <button onclick="prevSlide()" class="glass-card p-4 rounded-full hover:bg-white active:scale-90 transition-all group text-slate-500 hover:text-navy-900 shadow-lg border-white hover:border-blue-200">
+            <i data-lucide="chevron-right" class="w-6 h-6 group-hover:translate-x-0.5 transition-transform"></i>
+        </button>
+        
+        <div class="flex gap-3 px-6 py-4 glass-card rounded-full shadow-lg border-white bg-white/50 backdrop-blur-xl" id="dots-container"></div>
+        
+        <button onclick="nextSlide()" class="glass-card p-4 rounded-full hover:bg-white active:scale-90 transition-all group text-slate-500 hover:text-navy-900 shadow-lg border-white hover:border-blue-200">
+            <i data-lucide="chevron-left" class="w-6 h-6 group-hover:-translate-x-0.5 transition-transform"></i>
+        </button>
+    </div>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Slides Config
+        let currentSlide = 0;
+        const totalSlides = 10;
+        const slides = document.querySelectorAll('.slide');
+        const dotsContainer = document.getElementById('dots-container');
+        const pageCounter = document.getElementById('page-counter');
+        const counterContainer = document.getElementById('counter-container');
+
+        function toPersianDigits(n) {
+            const farsiDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            return n.toString().replace(/\d/g, x => farsiDigits[x]);
+        }
+
+        // Generate Dots
+        for(let i=0; i<totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.className = `h-2 rounded-full transition-all duration-300 cursor-pointer shadow-sm ${i === 0 ? 'w-10 bg-blue-600' : 'w-2 bg-slate-300 hover:bg-blue-400'}`;
+            dot.onclick = () => goToSlide(i);
+            dotsContainer.appendChild(dot);
+        }
+
+        function updateUI() {
+            // Show/Hide Counter based on slide 0
+            if (currentSlide === 0) {
+                counterContainer.style.opacity = '0';
+                counterContainer.style.transform = 'translateY(1rem)';
+            } else {
+                counterContainer.style.display = 'flex'; // Ensure flex layout
+                setTimeout(() => {
+                    counterContainer.style.opacity = '1';
+                    counterContainer.style.transform = 'translateY(0)';
+                }, 10);
+            }
+
+            // Update Slides
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active', 'prev', 'next');
+                
+                if(index === currentSlide) {
+                    slide.classList.add('active');
+                } else if(index < currentSlide) {
+                    slide.classList.add('prev');
+                } else {
+                    slide.classList.add('next');
+                }
+            });
+
+            // Update Dots
+            const dots = dotsContainer.children;
+            for(let i=0; i<dots.length; i++) {
+                dots[i].className = `h-2 rounded-full transition-all duration-300 cursor-pointer shadow-sm ${i === currentSlide ? 'w-10 bg-blue-600' : 'w-2 bg-slate-300 hover:bg-blue-400'}`;
+            }
+
+            // Update Counter
+            pageCounter.innerText = toPersianDigits(currentSlide + 1);
+        }
+
+        function nextSlide() {
+            if(currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateUI();
+            }
+        }
+
+        function prevSlide() {
+            if(currentSlide > 0) {
+                currentSlide--;
+                updateUI();
+            }
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateUI();
+        }
+
+        // Keyboard Nav
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'ArrowLeft' || e.key === ' ') nextSlide(); 
+            if(e.key === 'ArrowRight') prevSlide();
+        });
+
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        // Optimized 3D Tilt Effect
+        let isThrottled = false;
+        document.addEventListener('mousemove', (e) => {
+            if (isThrottled) return;
+            isThrottled = true;
+            
+            requestAnimationFrame(() => {
+                const activeSlide = document.querySelector('.slide.active');
+                if (!activeSlide) return;
+
+                const tiltContainers = activeSlide.querySelectorAll('.tilt-card');
+                
+                tiltContainers.forEach(container => {
+                    const rect = container.getBoundingClientRect();
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+                    
+                    // Normalize mouse position (-1 to 1)
+                    const percentX = (e.clientX - centerX) / (window.innerWidth / 2);
+                    const percentY = (e.clientY - centerY) / (window.innerHeight / 2);
+                    
+                    // Subtle rotation
+                    const rotateX = percentY * -4; 
+                    const rotateY = percentX * 4;
+
+                    container.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                });
+                
+                isThrottled = false;
+            });
+        });
+
+        // Initial UI State
+        updateUI();
+
+    </script>
+</body>
+</html>
